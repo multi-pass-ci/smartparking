@@ -1,6 +1,6 @@
 import { accesoToken } from '../libs/jwt.js'
 import bcrypt from 'bcryptjs'
-import { createUsuarios, verificarCorreo, getUsuarios } from '../models/usuarios.model.js'
+import { createUsuarios, verificarId, verificarCorreo } from '../models/usuarios.model.js'
 
 
 export const registarUsuario = async (req, res) => {
@@ -18,6 +18,7 @@ export const registarUsuario = async (req, res) => {
 
         res.cookie("token", token);
 
+        //respuesta al cliente
         res.json({
             id: userId,
             correo,
@@ -36,15 +37,17 @@ export const loginUsuario = async (req, res) => {
     try {
         const user = await verificarCorreo(correo);
         if (!user) {
-            return res.status(400).json(['Usuario no encotrado']);
+            return res.status(400).json(['Usuario no encontrado']);
         }
 
         const contra = await bcrypt.compare(contrasena, user.contrasena);
         if (!contra) {
-            return res.status(400).json(['Contraseña incorrecta'])
+            return res.status(400).json(['Contraseña incorrecta']);
         }
 
-        const token = await accesoToken({ id: user.id_usuario });
+        // Aquí pasamos el id del usuario para generar el token
+        const token = await accesoToken({ id: user.id });
+
         res.cookie("token", token);
 
         res.json({
@@ -59,3 +62,45 @@ export const loginUsuario = async (req, res) => {
         res.status(400).json({ message: error });
     }
 };
+
+
+
+export const logout = (req, res) => {
+    res.cookie("token", "", {
+        expires: new Date(0),
+    });
+    return res.sendStatus(200)
+}
+
+export const profile = async (req, res) => {
+    try {
+        // Verifica que req.user exista
+        console.log("req.user:", req.user);  // Esto imprimirá todo el objeto req.user para que puedas ver qué datos contiene
+
+        // Obtener el id desde req.user.id (decodificado del token)
+        const userId = parseInt(req.user.id, 10);  // Asegúrate de que el ID sea un número
+        console.log("ID del usuario como número:", userId);  // Verifica que el id esté disponible
+
+        // Llamar a verificarId con el id del usuario
+        const user = await verificarId(userId);  // Usamos la función verificarId
+
+        if (!user) {
+            return res.status(400).json(["Usuario no encontrado"]);
+        }
+
+        // Devolver los datos del usuario
+        return res.json({
+            id: user.id,  // Asegúrate de que este campo sea el correcto según tu base de datos
+            nombre: user.nombre,
+            correo: user.correo,
+            tipo: user.tipo,
+        });
+    } catch (error) {
+        console.error("Error al obtener el perfil:", error);
+        if (!res.headersSent) {
+            return res.status(500).json({ message: "Error interno del servidor" });
+        }
+    }
+};
+
+
