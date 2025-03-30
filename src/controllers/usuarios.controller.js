@@ -1,8 +1,8 @@
 import { accesoToken } from '../libs/jwt.js'
 import bcrypt from 'bcryptjs'
-import { createUsuarios, verificarId, verificarCorreo } from '../models/usuarios.model.js'
+import { createUsuarios, verificarId, verificarCorreo, createUsuariosCRUD } from '../models/usuarios.model.js'
 
-
+//Registro normal en el login
 export const registarUsuario = async (req, res) => {
     const { nombre, correo, contrasena } = req.body;
 
@@ -55,7 +55,8 @@ export const loginUsuario = async (req, res) => {
             correo: user.correo,
             nombre: user.nombre,
             token,
-            tipo: user.tipo
+            tipo: user.tipo,
+            estado: user.estado
         });
 
     } catch (error) {
@@ -63,7 +64,37 @@ export const loginUsuario = async (req, res) => {
     }
 };
 
+//Registro con campos editables (tipo, estado) en el CRUD.
+export const registarUsuarioCRUD = async (req, res) => {
+    const { nombre, correo, contrasena, tipo, estado } = req.body;
 
+    try {
+        const userCorreo = await verificarCorreo(correo);
+        if (userCorreo) {
+            return res.status(400).json({ message: "El correo ya está registrado" });
+        }
+
+        const userId = await createUsuariosCRUD(nombre, correo, contrasena, tipo, estado);
+
+        const token = await accesoToken({ id: userId });
+
+        res.cookie("token", token);
+
+        //respuesta al cliente
+        res.json({
+            id: userId,
+            correo,
+            nombre,
+            token,
+            tipo,
+            estado
+        });
+
+    } catch (error) {
+        console.error("Error en registro de usuario:", error);
+        res.status(500).json({ message: "Error interno del servidor" });
+    }
+};
 
 export const logout = (req, res) => {
     res.cookie("token", "", {
