@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import adminRoutes from '../routes/admin.routes.js';
+import iotRoutes from '../routes/iot.routes.js';
 
 // Iniciando el servidor
 const app = express();
@@ -21,5 +22,8 @@ app.use(cookieParser()); // Manejo de cookies
 
 // Ruta principal de las APIs
 app.use('/parking', adminRoutes);
+
+app.use('/api/iot', iotRoutes);
+
 
 export default app;

@@ -11,6 +11,10 @@ export const DB_DATABASE = process.env.DB_DATABASE || "sp_data"
 export const DB_PORT = process.env.DB_PORT || 3307
 export const TOKEN_SECRET = process.env.TOKEN_SECRET || "tokenrandom"; // Asegúrate de tener un valor en .env
 
+dotenv.config();
+
+export const MONGODB_URI = process.env.MONGODB_URI;
+
 // export const PORT = process.env.PORT || 4000;
 // export const DB_USER = process.env.DB_USER || "root";
 // export const DB_PASSWORD = process.env.DB_PASSWORD || "gieByyRJPXaixNZkKRjeEXNScSgRMtsx";
