@@ -11,7 +11,6 @@ import {
 import mongoose from 'mongoose';
 import { MONGODB_URI } from './config.js';
 
-
 export const pool = createPool({
     host: DB_HOST,
     user: DB_USER,
