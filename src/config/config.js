@@ -12,7 +12,6 @@ export const TOKEN_SECRET = process.env.TOKEN_SECRET || "tokenrandom";
 
 export const MONGODB_URI = process.env.MONGODB_URI;
 
-console.log("MONGODB_URI =", MONGODB_URI);
 
 // export const PORT = process.env.PORT || 4000;
 // export const DB_USER = process.env.DB_USER || "root";

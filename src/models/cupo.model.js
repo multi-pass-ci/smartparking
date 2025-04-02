@@ -18,7 +18,8 @@ const cupoSchema = new mongoose.Schema({
   sensorIR: {
     type: Boolean,
     required: true,
-  }
+  },
 });
 
-export default mongoose.model('Cupo', cupoSchema, 'cupos');
+const Cupo = mongoose.model('Cupo', cupoSchema);
+export default Cupo;

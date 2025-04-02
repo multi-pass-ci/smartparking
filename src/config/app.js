@@ -27,3 +27,4 @@ app.use('/api/iot', iotRoutes);
 
 
 export default app;
+
