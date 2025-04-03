@@ -1,6 +1,6 @@
 import Cajon from '../models/cajon.model.js';
 import Cupo from '../models/cupo.model.js';
-import { pool } from '../config/db.js'; // Agregamos conexión MySQL
+import { pool } from '../config/db.js'; // Conexión a MySQL
 
 // Guardar cajón (MongoDB)
 export const guardarCajon = async (req, res) => {
@@ -26,7 +26,7 @@ export const registrarCupo = async (req, res) => {
   }
 };
 
-// Actualizar código escaneado por lector (MySQL)
+// Actualizar código escaneado por lector (MySQL) con hora de Querétaro
 export const actualizarLector = async (req, res) => {
   const { codigo } = req.body;
 
@@ -34,8 +34,11 @@ export const actualizarLector = async (req, res) => {
     return res.status(400).json({ error: 'El campo "codigo" es requerido' });
   }
 
-  const ahoraHora = new Date().toLocaleTimeString('en-GB', { hour12: false }); // HH:MM:SS
-  const ahoraFecha = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  // Zona horaria de Querétaro (UTC-6)
+  const opciones = { timeZone: 'America/Mexico_City', hour12: false };
+  const ahora = new Date();
+  const ahoraHora = ahora.toLocaleTimeString('en-GB', opciones); // HH:mm:ss
+  const ahoraFecha = ahora.toLocaleDateString('en-CA', { timeZone: 'America/Mexico_City' }); // YYYY-MM-DD
 
   try {
     const [result] = await pool.execute(
