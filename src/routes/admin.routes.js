@@ -8,7 +8,7 @@ import { loginSchema, registroSchema, updateSchema } from "../schemas/usuarios.s
 import { getUsuarios, getUsersId, deleteUserById, updateUserById, crearUsuarioGoogle, updateUserByIdCRUD, verificarCorreo } from "../models/usuarios.model.js"; // Importar las nuevas funciones
 import { authToken } from "../middlewares/validarToken.js";
 import { getRegistros, getRegistroById, createRegistro, registrarSalida, deleteRegistro, getRegistrosActivos, getRegistrosPendientesByUsuario, getRegistrosById_Usuario, cancelarReservaId } from "../models/registros.model.js";
-
+import { cuposGrafica, ingresosGrafica, utilizacionGrafica } from '../controllers/graficas.controller.js';
 
 const router = Router();
 
@@ -25,6 +25,11 @@ router.post('/usuarios/', registarUsuarioCRUD);
 router.patch('/usuarios/update/:id', authToken, updateUserById); //para editar en móvil campo nombre y correo
 router.patch('/usuarios/:id', authToken, validateMid(updateSchema), updateUserByIdCRUD); //para editar en web más campos
 router.delete('/usuarios/:id', authToken, deleteUserById);
+
+// Gráficas
+router.get('/graficas/cupos', cuposGrafica);
+router.get('/graficas/ingresos', ingresosGrafica);
+router.get('/graficas/utilizacion', utilizacionGrafica);
 
 // Configurar el cliente de Google OAuth
 const client = new OAuth2Client("502548877339-iau4hvt7nlhm3p9d31q33960q1c10524.apps.googleusercontent.com");
