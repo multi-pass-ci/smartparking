@@ -12,6 +12,7 @@ export const DB_DATABASE = process.env.DB_DATABASE || "railway"
 export const DB_PORT = process.env.DB_PORT || 43697
 export const TOKEN_SECRET = process.env.TOKEN_SECRET || "tokenrandom";
 
+export const MONGODB_URI = process.env.MONGODB_URI;
 
 //Configuración para conectarse local, sustituyan a sus variables de entorno mis panas:
 
