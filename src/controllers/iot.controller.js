@@ -66,13 +66,40 @@ export const actualizarLector = async (req, res) => {
 //leer codigo de barras
 export const obtenerCodigoLector = async (req, res) => {
   try {
+    // 1. Obtener el código y hora_salida del lector
     const [rows] = await pool.query('SELECT * FROM lector WHERE id = 1');
     if (rows.length === 0) {
       return res.status(404).json({ message: 'No hay código registrado' });
     }
-    res.json(rows[0]);
+
+    const { codigo, hora_salida, fecha } = rows[0];
+
+    if (!codigo || !hora_salida || !fecha) {
+      return res.status(400).json({ message: 'Falta código, fecha o hora_salida' });
+    }
+
+    // 2. Actualizar salida en registros si aún no está
+    await pool.query(
+      `UPDATE registros SET salida = ? WHERE cb = ? AND salida IS NULL`,
+      [hora_salida, codigo]
+    );
+
+    // 3. Recuperar el registro actualizado (ya con el pago calculado por el TRIGGER)
+    const [registro] = await pool.query(
+      `SELECT * FROM registros WHERE cb = ?`,
+      [codigo]
+    );
+
+    if (registro.length === 0) {
+      return res.status(404).json({ message: 'Registro no encontrado' });
+    }
+
+    // 4. Enviar el registro completo, incluyendo el monto a pagar
+    res.json(registro[0]);
+
   } catch (err) {
-    console.error('Error obteniendo código:', err);
-    res.status(500).json({ error: 'Error al obtener código' });
+    console.error('Error procesando código lector:', err);
+    res.status(500).json({ error: 'Error al obtener información del lector' });
   }
 };
+
