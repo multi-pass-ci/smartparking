@@ -17,9 +17,7 @@ app.use(
         origin: [
             'http://localhost:5173', 
             'http://localhost:8081',
-            'https://smartparking-ten.vercel.app',
-            'https://smartparking-jonathans-projects-27d0782c.vercel.app',
-            'https://smartparking-hmsfqqlky-jonathans-projects-27d0782c.vercel.app'
+            'https://smartparking-eight.vercel.app/'
             ],
         credentials: true,
     })
