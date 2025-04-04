@@ -66,7 +66,7 @@ export const actualizarLector = async (req, res) => {
 //leer codigo de barras
 export const obtenerCodigoLector = async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT codigo, hora_salida FROM lector WHERE id = 1');
+    const [rows] = await pool.query('SELECT * FROM lector WHERE id = 1');
     if (rows.length === 0) {
       return res.status(404).json({ message: 'No hay código registrado' });
     }
