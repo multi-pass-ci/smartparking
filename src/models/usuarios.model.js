@@ -28,11 +28,14 @@ export async function createUsuarios(nombre, correo, contrasena) {
 
     try {
         const passwordHash = await bcrypt.hash(contrasena, 10);
-        const [result] = await connection.execute(
-            "INSERT INTO usuarios (nombre, correo, contrasena, tipo, estado) VALUES(?,?,?,?,?)",
-            [nombre, correo, passwordHash, 1, 'Activo']
+        
+        const [rows] = await connection.query(
+            "CALL sp_crear_usuario(?, ?, ?, ?, ?)",
+            [nombre, correo, passwordHash, 1, 'activo']
         );
-        return result.insertId;
+
+        // MySQL devuelve un array de arrays cuando se usa CALL
+        return rows[0][0].id;
     } finally {
         connection.release();
     }
