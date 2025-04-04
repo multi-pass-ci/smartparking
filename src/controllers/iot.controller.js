@@ -64,8 +64,6 @@ export const actualizarLector = async (req, res) => {
 
 
 //leer codigo de barras
-import { pool } from '../config/db.js';
-
 export const obtenerCodigoLector = async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT codigo FROM lector WHERE id = 1');
