@@ -61,3 +61,20 @@ export const actualizarLector = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+
+
+//leer codigo de barras
+import { pool } from '../config/db.js';
+
+export const obtenerCodigoLector = async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT codigo FROM lector WHERE id = 1');
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'No hay código registrado' });
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Error obteniendo código:', err);
+    res.status(500).json({ error: 'Error al obtener código' });
+  }
+};
