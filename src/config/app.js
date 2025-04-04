@@ -2,6 +2,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import adminRoutes from '../routes/admin.routes.js';
+import iotRoutes from '../routes/iot.routes.js';
+
 
 // Iniciando el servidor
 const app = express();
@@ -17,8 +19,8 @@ app.use(
             'http://localhost:8081',
             'https://smartparking-ten.vercel.app',
             'https://smartparking-jonathans-projects-27d0782c.vercel.app',
-            'https://smartparking-jonathancraxker-jonathans-projects-27d0782c.vercel.app'
-        ],
+            'https://smartparking-hmsfqqlky-jonathans-projects-27d0782c.vercel.app'
+            ],
         credentials: true,
     })
 );
@@ -27,5 +29,6 @@ app.use(cookieParser()); // Manejo de cookies
 
 // Ruta principal de las APIs
 app.use('/parking', adminRoutes);
+app.use('/api/iot', iotRoutes);
 
 export default app;

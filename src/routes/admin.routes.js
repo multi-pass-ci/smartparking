@@ -238,12 +238,13 @@ router.get('/barcode', async (req, res) => {
         const { value } = req.query;
 
         bwipjs.toBuffer({
-            bcid: 'code128',       // Tipo de código de barras
-            text: value,           // Texto a codificar
-            scale: 3,              // Escala 3x
-            height: 10,            // Altura en mm
-            includetext: true,     // Mostrar texto debajo
-            textxalign: 'center',  // Centrar texto
+            bcid: 'code128',
+            text: value,
+            scale: 2,
+            height: 20,
+            includetext: true,
+            textxalign: 'center',
+            
         }, (err, png) => {
             if (err) {
                 return res.status(500).send('Error generando código de barras');
@@ -256,6 +257,7 @@ router.get('/barcode', async (req, res) => {
         res.status(500).send('Error interno');
     }
 });
+
 
 
 // Mantén el endpoint existente para registros pendientes
