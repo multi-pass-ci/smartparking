@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import adminRoutes from '../routes/admin.routes.js';
 import iotRoutes from '../routes/iot.routes.js';
+import eventoRoutes from '../routes/evento.routes.js';
 
 // Iniciando el servidor
 const app = express();
@@ -25,6 +26,7 @@ app.use('/parking', adminRoutes);
 
 app.use('/api/iot', iotRoutes);
 
+app.use('/api', eventoRoutes);
 
 export default app;
 
