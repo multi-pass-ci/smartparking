@@ -16,3 +16,19 @@ export const obtenerEventos = async () => {
   const [rows] = await pool.execute('SELECT * FROM eventos ORDER BY fecha DESC');  // ← aquí también
   return rows;
 };
+
+// Actualizar un evento
+export const actualizarEvento = async (id, datos) => {
+    const { nombre, invitados, fecha, latitude, longitude } = datos;
+    const [result] = await pool.execute(
+      `UPDATE eventos SET nombre = ?, invitados = ?, fecha = ?, latitude = ?, longitude = ? WHERE id = ?`,
+      [nombre, invitados, fecha, latitude, longitude, id]
+    );
+    return result.affectedRows;
+  };
+  
+  // Eliminar un evento
+  export const eliminarEvento = async (id) => {
+    const [result] = await pool.execute('DELETE FROM eventos WHERE id = ?', [id]);
+    return result.affectedRows;
+  };
