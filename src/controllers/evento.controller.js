@@ -1,9 +1,35 @@
 import {
     crearEvento,
     obtenerEventos,
+    obtenerEventoPorId,
     actualizarEvento,
     eliminarEvento
   } from '../models/evento.model.js';
+
+  // GET /eventos → Buscar un evento
+  export const buscarEventoPorId = async (req, res) => {
+    try {
+      const evento = await obtenerEventoPorId(req.params.id);
+      if (!evento) {
+        return res.status(404).json({ error: 'Evento no encontrado' });
+      }
+      res.json(evento);
+    } catch (error) {
+      console.error('❌ Error al buscar evento:', error.message, error);
+      res.status(500).json({ error: 'Error al buscar el evento' });
+    }
+  };
+
+// GET /eventos → Listar todos los eventos
+export const listarEventos = async (req, res) => {
+    try {
+      const eventos = await obtenerEventos();
+      res.status(200).json(eventos);
+    } catch (error) {
+      console.error('❌ Error al obtener eventos:', error);
+      res.status(500).json({ error: 'Error al obtener los eventos' });
+    }
+  };
 
 // POST /eventos → Crear nuevo evento
 export const registrarEvento = async (req, res) => {
@@ -15,18 +41,6 @@ export const registrarEvento = async (req, res) => {
     res.status(500).json({ error: 'Error al crear el evento' });
   }
 };
-
-// GET /eventos → Listar todos los eventos
-export const listarEventos = async (req, res) => {
-  try {
-    const eventos = await obtenerEventos();
-    res.status(200).json(eventos);
-  } catch (error) {
-    console.error('❌ Error al obtener eventos:', error);
-    res.status(500).json({ error: 'Error al obtener los eventos' });
-  }
-};
-
 
   // PUT /eventos/:id → Actualizar evento
   export const editarEvento = async (req, res) => {

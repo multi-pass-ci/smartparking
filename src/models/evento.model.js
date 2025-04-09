@@ -1,5 +1,17 @@
 import { pool } from '../config/db.js';
 
+// Obtener un evento
+export const obtenerEventoPorId = async (id) => {
+    const [rows] = await pool.execute('SELECT * FROM eventos WHERE id = ?', [id]);
+    return rows[0]; // Devuelve un solo objeto
+  };
+
+// Obtener todos los eventos
+export const obtenerEventos = async () => {
+  const [rows] = await pool.execute('SELECT * FROM eventos ORDER BY fecha DESC');  // ← aquí también
+  return rows;
+};
+
 // Insertar un nuevo evento
 export const crearEvento = async (evento) => {
   const { nombre, invitados, fecha, latitude, longitude } = evento;
@@ -9,12 +21,6 @@ export const crearEvento = async (evento) => {
     [nombre, invitados, fecha, latitude, longitude]
   );
   return result.insertId;
-};
-
-// Obtener todos los eventos
-export const obtenerEventos = async () => {
-  const [rows] = await pool.execute('SELECT * FROM eventos ORDER BY fecha DESC');  // ← aquí también
-  return rows;
 };
 
 // Actualizar un evento
