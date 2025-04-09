@@ -6,7 +6,6 @@ import {
     borrarEvento
   } from '../controllers/evento.controller.js';
   
-
 const router = Router();
 
 router.get('/eventos/:id', buscarEventoPorId); // Buscar evento por ID
