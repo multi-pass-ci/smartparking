@@ -1,4 +1,4 @@
-import db from '../config/db.js';
+import { pool } from '../config/db.js';
 
 // Insertar un nuevo evento
 export const crearEvento = async (evento) => {
